@@ -1,25 +1,34 @@
 #include <raylib.h>
-#include "ball.h"
+#include "game.h"
+using namespace std;
 
+double lastTimeUpdate = 0;
+bool EventTriggered(double interval) {
+    double currentTime = GetTime();
+        if (currentTime - lastTimeUpdate >= interval)
+        {
+            lastTimeUpdate = currentTime;
+            return true;
+        }
+        return false;
+}
 int main() 
 {
-    const Color darkGreen = {20, 160, 133, 255};
-    
-    constexpr int screenWidth = 800;
-    constexpr int screenHeight = 600;
-    
-    Ball ball;
-    
-    InitWindow(screenWidth, screenHeight, "My first RAYLIB program!");
+    Color darkblue = {44, 44, 127, 255};
+    InitWindow(300, 600, "Tetris");
     SetTargetFPS(60);
-    
-    while (!WindowShouldClose())
+    Game game = Game();
+    while (WindowShouldClose() == false)
     {
-        ball.Update();
+        game.HandleInput();
+        if (EventTriggered(0.5))
+        {
+            game.MoveBlockDown();
+        }
         
         BeginDrawing();
-            ClearBackground(darkGreen);
-            ball.Draw();
+        ClearBackground(darkblue);
+        game.Draw();
         EndDrawing();
     }
     
